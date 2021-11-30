@@ -4,6 +4,7 @@ from pysnmp import hlapi
 # will be using SNMP engine which is heart of the SNMP protocol
 ENGINE = hlapi.SnmpEngine()
 CONTEXT = hlapi.ContextData()
+PORT = 162
 
 
 def constructObjectTypes(list_of_oids):
@@ -64,23 +65,22 @@ def constructMaptoPySNMPDataformat(pairValues):
     return values
 
 
-def get(target, listofOids, authData, port):
+def get(target, listofOids, authData):
     """
     get is the snmp operation which will allows us to retrieve the data
     :param listofOids:
     :param target:  IP or name of the device
     :param oid: object identifier from MIB
     :param authData: credentials to authenticate
-    :param port: not required but we can specify the UDP port
     :return:
     """
-    hlr = hlapi.getCmd(ENGINE, authData, hlapi.UdpTransportTarget(target, port),
+    hlr = hlapi.getCmd(ENGINE, authData, hlapi.UdpTransportTarget(target, PORT),
                        CONTEXT, *constructObjectTypes(listofOids))
     return fetch(hlr, 1)[0]
 
 
-def set(target, pairsValue, authData, port=143):
-    hlr = hlapi.setCmd(ENGINE, authData, hlapi.UdpTransportTarget((target, port)),
+def set(target, pairsValue, authData):
+    hlr = hlapi.setCmd(ENGINE, authData, hlapi.UdpTransportTarget((target, PORT)),
                        CONTEXT, *constructMaptoPySNMPDataformat(pairsValue))
     return fetch(hlr, 1)[0]
 
