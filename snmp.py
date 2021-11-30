@@ -90,4 +90,4 @@ print(get('10.0.0.1', ['1.3.5.3.0.6.1.2.0'], hlapi.CommunityData('CS158B')))
 # return
 # {'1.3.5.3.0.6.1.2.0': 'R1'}
 
-set('10.0.0.1', {'1.3.5.3.0.6.1.2.0':'R1'}, hlapi.CommunityData('CS158B'))
+set('10.0.0.1', {'1.3.5.3.0.6.1.2.0':'R1-New'}, hlapi.CommunityData('CS158B'))
