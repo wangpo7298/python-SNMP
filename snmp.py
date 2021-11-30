@@ -1,5 +1,10 @@
 from pysnmp import hlapi
 
+# some of the global variable
+# will be using SNMP engine which is heart of the SNMP protocol
+ENGINE = hlapi.SnmpEngine()
+CONTEXT = hlapi.ContextData()
+
 
 def constructObjectTypes(list_of_oids):
     """
@@ -59,7 +64,7 @@ def constructMaptoPySNMPDataformat(pairValues):
     return values
 
 
-def get(target, listofOids, authData, port, engine=hlapi.SnmpEngine(), context=hlapi.ContextData()):
+def get(target, listofOids, authData, port):
     """
     get is the snmp operation which will allows us to retrieve the data
     :param listofOids:
@@ -67,17 +72,16 @@ def get(target, listofOids, authData, port, engine=hlapi.SnmpEngine(), context=h
     :param oid: object identifier from MIB
     :param authData: credentials to authenticate
     :param port: not required but we can specify the UDP port
-    :param engine: will be using SNMP engine which is heart of the SNMP protocol
     :return:
     """
-    hlr = hlapi.getCmd(engine, authData, hlapi.UdpTransportTarget(target, port),
-                       context, *constructObjectTypes(listofOids))
+    hlr = hlapi.getCmd(ENGINE, authData, hlapi.UdpTransportTarget(target, port),
+                       CONTEXT, *constructObjectTypes(listofOids))
     return fetch(hlr, 1)[0]
 
 
-def set(target, pairsValue, authData, port=143, engine=hlapi.SnmpEngine(),context=hlapi.ContextData()):
-    hlr = hlapi.setCmd(engine, authData, hlapi.UdpTransportTarget((target, port)),
-                       context, *constructMaptoPySNMPDataformat(pairsValue))
+def set(target, pairsValue, authData, port=143):
+    hlr = hlapi.setCmd(ENGINE, authData, hlapi.UdpTransportTarget((target, port)),
+                       CONTEXT, *constructMaptoPySNMPDataformat(pairsValue))
     return fetch(hlr, 1)[0]
 
 
